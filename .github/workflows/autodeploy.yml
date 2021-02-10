@@ -1,7 +1,7 @@
 name: Auto Deploy
-on: 
+on:
   push:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -10,7 +10,7 @@ jobs:
       - name: Setup Node.js # setup Node.js in the runner
         uses: actions/setup-node@v1
         with:
-          node-version: '12'
+          node-version: "12"
 
       - name: Get yarn cache directory
         id: yarn-cache-dir
@@ -27,15 +27,14 @@ jobs:
       - name: install node modules
         run: |
           yarn install --frozen-lockfile
-      - run: yarn build --if-present  # build the project
+      - run: yarn build --if-present # build the project
       # - run: yarn test # run the tests
       # deploy site to netlify using secrets created on repository
-      - uses: netlify/actions/cli@master 
+      - uses: netlify/actions/cli@master
         env:
           GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          build-dir: './build'
         with:
           args: deploy --dir=build --prod
           secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
